@@ -34,10 +34,10 @@ public class User {
         this.password = password;
     }
 
-    public User(String username, String password, List<Item> items) {
-        this.username = username;
-        this.password = password;
-        this.items = items;
-    }
+//    public User(String username, String password, List<Item> items) {
+//        this.username = username;
+//        this.password = password;
+//        this.items = items;
+//    }
 }
 

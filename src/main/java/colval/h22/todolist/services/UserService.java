@@ -38,17 +38,17 @@ public class UserService implements InterfaceUserService {
         return userFound;
     }
 
-    @Override
-    public User addItemsToUser(Long id, List<Item> items) {
-        var userFound = read(id);
-        var itemsOnUser = userFound.getItems();
-
-        itemsOnUser.addAll(items);
-
-        userFound.setItems(itemsOnUser);
-
-        update(userFound);
-
-        return userFound;
-    }
+//    @Override
+//    public User addItemsToUser(Long id, List<Item> items) {
+//        var userFound = read(id);
+//        var itemsOnUser = userFound.getItems();
+//
+//        itemsOnUser.addAll(items);
+//
+//        userFound.setItems(itemsOnUser);
+//
+//        update(userFound);
+//
+//        return userFound;
+//    }
 }
