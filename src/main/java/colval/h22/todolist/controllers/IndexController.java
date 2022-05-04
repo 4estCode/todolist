@@ -22,7 +22,6 @@ public class IndexController {
     public IndexController(ItemService itemService, UserService userService) {
         this.itemService = itemService;
         this.userService = userService;
-        populate();
     }
 
     @GetMapping
@@ -37,10 +36,11 @@ public class IndexController {
         Item item02 = new Item("Item02", 20, false, "Class01", Timestamp.from(Instant.now()));
         Item item03 = new Item("Item03", 20, false, "Class02", Timestamp.from(Instant.now()));
         Item item04 = new Item("Item04", 20, false, "Class02", Timestamp.from(Instant.now()));
-        User user01 = new User("User01", "Password01", Arrays.asList(item01, item02));
+        User user01 = new User("User01", "Password01");
         User user02 = new User("User02", "Password02");
         user01 = userService.create(user01);
         user02 = userService.create(user02);
-        userService.addItemsToUser(user02.getId(), Arrays.asList(item03, item04));
+        itemService.createManyWithUserId(Arrays.asList(item01, item02), user01.getId());
+        itemService.createManyWithUserId(Arrays.asList(item03, item04), user02.getId());
     }
 }
