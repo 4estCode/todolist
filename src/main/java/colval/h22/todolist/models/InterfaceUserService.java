@@ -12,4 +12,6 @@ public interface InterfaceUserService {
     public User delete(Long id);
 
     public User addItemsToUser(Long id, List<Item> items);
+
+    public Week getCurrentWeek(Long id);
 }

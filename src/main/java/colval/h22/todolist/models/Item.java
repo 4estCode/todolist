@@ -1,19 +1,25 @@
 package colval.h22.todolist.models;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.Objects;
 
 @Entity
 @Table(name = "item")
-@Data
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
 @NoArgsConstructor
 @AllArgsConstructor
 public class Item {
+
+    // VARIABLES
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "item_id")
@@ -37,9 +43,23 @@ public class Item {
     @Column(name = "deadline")
     private Timestamp deadline;
 
+    // RELATIONS
+
+    @ManyToOne
+    @JoinColumn(name = "day_id")
+    private Day day;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "week_id", nullable = true)
+    @ToString.Exclude
+    private Week week;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = true)
+    @ToString.Exclude
     private User user;
+
+    //
 
     public Item(String title, int percentWeightOnYear, boolean isTeamWork, String className, Timestamp deadline, User user) {
         this.title = title;
@@ -58,6 +78,19 @@ public class Item {
         this.className = className;
         this.created = Timestamp.from(Instant.now());
         this.deadline = deadline;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Item item = (Item) o;
+        return id != null && Objects.equals(id, item.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
 }
 

@@ -15,6 +15,9 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
+
+    // VARIABLES
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
@@ -26,18 +29,22 @@ public class User {
     @Column(name = "password")
     private String password;
 
+    // RELATIONS
+
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
-    private List<Item> items;
+    private List<Week> weeks;
+
+    //
 
     public User(String username, String password) {
         this.username = username;
         this.password = password;
     }
 
-    public User(String username, String password, List<Item> items) {
+    public User(String username, String password, List<Week> weeks) {
         this.username = username;
         this.password = password;
-        this.items = items;
+        this.weeks = weeks;
     }
 }
 
