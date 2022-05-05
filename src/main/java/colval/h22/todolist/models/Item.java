@@ -1,5 +1,6 @@
 package colval.h22.todolist.models;
 
+import colval.h22.todolist.models.dto.ItemDTO;
 import lombok.*;
 import org.hibernate.Hibernate;
 
@@ -13,7 +14,6 @@ import java.util.Objects;
 @Getter
 @Setter
 @ToString
-@RequiredArgsConstructor
 @NoArgsConstructor
 @AllArgsConstructor
 public class Item {
@@ -37,47 +37,33 @@ public class Item {
     @Column(name = "class_name")
     private String className;
 
-    @Column(name = "created")
-    private Timestamp created;
-
-    @Column(name = "deadline")
-    private Timestamp deadline;
-
     // RELATIONS
 
-    @ManyToOne
-    @JoinColumn(name = "day_id")
-    private Day day;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "week_id", nullable = true)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "created_date_id")
     @ToString.Exclude
-    private Week week;
+    private ItemDate created;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "deadline_date_id")
+    @ToString.Exclude
+    private ItemDate deadline;
+
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = true)
     @ToString.Exclude
     private User user;
 
     //
 
-    public Item(String title, int percentWeightOnYear, boolean isTeamWork, String className, Timestamp deadline, User user) {
-        this.title = title;
-        this.percentWeightOnYear = percentWeightOnYear;
-        this.isTeamWork = isTeamWork;
-        this.className = className;
-        this.created = Timestamp.from(Instant.now());
-        this.deadline = deadline;
-        this.user = user;
-    }
-
-    public Item(String title, int percentWeightOnYear, boolean isTeamWork, String className, Timestamp deadline) {
-        this.title = title;
-        this.percentWeightOnYear = percentWeightOnYear;
-        this.isTeamWork = isTeamWork;
-        this.className = className;
-        this.created = Timestamp.from(Instant.now());
-        this.deadline = deadline;
+    public Item(ItemDTO dto) {
+        this.title = dto.getTitle();
+        this.percentWeightOnYear = dto.getPercentWeightOnYear();
+        this.isTeamWork = dto.isTeamWork();
+        this.className = dto.getClassName();
+        // FIXME Date hardcoded
+        this.created = new ItemDate(2022, 01, 01);
+        this.deadline = dto.getDeadline();
     }
 
     @Override

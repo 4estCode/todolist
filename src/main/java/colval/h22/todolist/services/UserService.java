@@ -1,11 +1,13 @@
 package colval.h22.todolist.services;
 
 import colval.h22.todolist.models.*;
+import colval.h22.todolist.models.interfaces.InterfaceUserService;
 import colval.h22.todolist.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService implements InterfaceUserService {
@@ -38,31 +40,23 @@ public class UserService implements InterfaceUserService {
     }
 
     @Override
-    public User addItemsToUser(Long id, List<Item> items) {
-        var userFound = read(id);
-        var itemsOnUser = userFound.getWeeks();
-
-        itemsOnUser.addAll(items);
-
-        userFound.setItems(itemsOnUser);
-
-        update(userFound);
-
-        return userFound;
+    public List<User> getAll() {
+        return userRepository.findAll();
     }
 
     @Override
+    public Optional<User> getByCredentials(String username, String password) {
+        return userRepository.getByCredentials(username, password);
+    }
+
     public Week getCurrentWeek(Long id) {
-        var user = userRepository.getById(id);
+        var user = read(id);
+        Week currentWeek = new Week();
 
         long todayMillis = System.currentTimeMillis();
-        int numberOfToday = new Date(todayMillis).toLocalDate().getDayOfMonth();
+//        int numberOfToday = new Date(todayMillis).toLocalDate().getDayOfMonth();
 
-        List<Week> weeks = user.getWeeks();
-        // TODO FIXME
-        for (var week: weeks) {
-
-        }
+        Week.GenerateWeekFromDate(new Date(todayMillis).toLocalDate());
 
         return null;
     }

@@ -1,27 +1,24 @@
 package colval.h22.todolist.services;
 
-import colval.h22.todolist.models.InterfaceItemService;
+import colval.h22.todolist.models.interfaces.InterfaceItemService;
 import colval.h22.todolist.models.Item;
 import colval.h22.todolist.repositories.ItemRepository;
+import org.hibernate.cfg.NotYetImplementedException;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.sql.Date;
+import java.util.Calendar;
 import java.util.List;
 
 @Service
 public class ItemService implements InterfaceItemService {
     private final ItemRepository itemRepository;
-    private final UserService userService; // FIXME: Bad way?
+    private final UserService userService;
 
     public ItemService(ItemRepository itemRepository, UserService userService) {
         this.itemRepository = itemRepository;
         this.userService = userService;
     }
-
-//    @Override
-//    public Item create(Item item) {
-//        return itemRepository.save(item);
-//    }
 
     @Override
     public Item createWithUserId(Item item, Long userId) {
@@ -33,17 +30,23 @@ public class ItemService implements InterfaceItemService {
 
     @Override
     public List<Item> createManyWithUserId(List<Item> items, Long userId) {
-        var returnList = new ArrayList<Item>();
-        for (var item :
-                items) {
-            returnList.add(createWithUserId(item, userId));
-        }
-        return returnList;
+        var userFound = userService.read(userId);
+
+        for (var item : items)
+            item.setUser(userFound);
+
+        itemRepository.saveAll(items);
+        return items;
     }
 
     @Override
     public Item read(Long id) {
         return itemRepository.findById(id).orElseThrow();
+    }
+
+    @Override
+    public List<Item> getAll() {
+        return itemRepository.findAll();
     }
 
     @Override
@@ -56,5 +59,10 @@ public class ItemService implements InterfaceItemService {
         var itemFound = read(id);
         itemRepository.delete(itemFound);
         return itemFound;
+    }
+
+    @Override
+    public List<Item> getByDate(Date date) {
+        throw new NotYetImplementedException();
     }
 }

@@ -20,9 +20,30 @@
         </div>
         <div style="height: 75vh; width: 75vw; min-height: 75vh; min-width: 75vw; max-height: 75vh; max-width: 75vw; background: rgba(255, 255, 255, 0.1); border-radius: 15px;" class="w-100 h-100 p-4 shadow-lg">
             <!--Center Box-->
+            <!-- Container -> Table -->
+            <table class="table">
+                <thead>
+                <tr>
+                    <th class="col">Dimanche</th>
+                    <th class="col">Lundi</th>
+                    <th class="col">Mardi</th>
+                    <th class="col">Mercredi</th>
+                    <th class="col">Jeudi</th>
+                    <th class="col">Vendredi</th>
+                    <th class="col">Samedi</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="week: ${weeks}">
+                    <td th:each="day: ${week.days}">
+
+                    </td>
+                </tr>
+                </tbody>
+            </table>
             <div class="container">
-                <div  class="row row-cols-7">
-                    <div th:each="day: ${days}" th:text="${day}" class="col m-1 border border-1 border-secondary shadow rounded-3"></div>
+                <div class="row row-cols-7">
+                    <div style="width: 5vw; height: 5vh;" th:each="day: ${days}" th:text="${day}" class="col m-1 border border-1 border-secondary shadow rounded-3"></div>
                 </div>
             </div>
         </div>

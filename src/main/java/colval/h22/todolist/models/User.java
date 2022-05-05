@@ -1,12 +1,12 @@
 package colval.h22.todolist.models;
 
+import colval.h22.todolist.models.dto.UserDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.List;
 
 @Entity
@@ -14,6 +14,9 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@NamedQuery(
+        name = "User.getByCredentials",
+        query = "select u from User u where u.username = :username and u.password = :password")
 public class User {
 
     // VARIABLES
@@ -31,8 +34,9 @@ public class User {
 
     // RELATIONS
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
-    private List<Week> weeks;
+    @OneToMany(fetch = FetchType.LAZY)
+    @ToString.Exclude
+    private List<Item> items;
 
     //
 
@@ -41,10 +45,9 @@ public class User {
         this.password = password;
     }
 
-    public User(String username, String password, List<Week> weeks) {
-        this.username = username;
-        this.password = password;
-        this.weeks = weeks;
+    public User(UserDTO dto) {
+        this.username = dto.getUsername();
+        this.password = dto.getPassword();
     }
 }
 
