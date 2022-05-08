@@ -1,6 +1,7 @@
 package colval.h22.todolist.services;
 
 import colval.h22.todolist.models.*;
+import colval.h22.todolist.models.entities.User;
 import colval.h22.todolist.models.interfaces.InterfaceUserService;
 import colval.h22.todolist.repositories.UserRepository;
 import org.springframework.stereotype.Service;
@@ -60,6 +61,4 @@ public class UserService implements InterfaceUserService {
 
         return null;
     }
-
-
 }

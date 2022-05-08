@@ -1,12 +1,12 @@
-package colval.h22.todolist.models;
+package colval.h22.todolist.models.entities;
 
 import colval.h22.todolist.models.dto.ItemDTO;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.Objects;
 
 @Entity
@@ -28,7 +28,7 @@ public class Item {
     @Column(name = "title")
     private String title;
 
-    @Column(name = "weightOnYear")
+    @Column(name = "weight_on_year")
     private int percentWeightOnYear;
 
     @Column(name = "is_team_work")
@@ -40,18 +40,15 @@ public class Item {
     // RELATIONS
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "created_date_id")
+    @JoinColumn(name = "date_id")
     @ToString.Exclude
-    private ItemDate created;
-
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "deadline_date_id")
-    @ToString.Exclude
+    @JsonBackReference
     private ItemDate deadline;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id", nullable = true)
+    @JoinColumn(name = "user_id")
     @ToString.Exclude
+    @JsonBackReference
     private User user;
 
     //
@@ -61,8 +58,6 @@ public class Item {
         this.percentWeightOnYear = dto.getPercentWeightOnYear();
         this.isTeamWork = dto.isTeamWork();
         this.className = dto.getClassName();
-        // FIXME Date hardcoded
-        this.created = new ItemDate(2022, 01, 01);
         this.deadline = dto.getDeadline();
     }
 

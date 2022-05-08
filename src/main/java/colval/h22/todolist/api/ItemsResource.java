@@ -1,10 +1,10 @@
 package colval.h22.todolist.api;
 
-import colval.h22.todolist.models.Item;
-import colval.h22.todolist.models.ItemDate;
-import colval.h22.todolist.models.User;
+import colval.h22.todolist.models.entities.Item;
+import colval.h22.todolist.models.entities.ItemDate;
 import colval.h22.todolist.models.dto.ItemDTO;
-import colval.h22.todolist.models.dto.UserDTO;
+import colval.h22.todolist.models.entities.User;
+import colval.h22.todolist.services.DateService;
 import colval.h22.todolist.services.ItemService;
 import colval.h22.todolist.services.UserService;
 import org.slf4j.Logger;
@@ -19,11 +19,13 @@ import java.util.List;
 public class ItemsResource {
     private final ItemService itemService;
     private final UserService userService;
+    private final DateService dateService;
     private final Logger logger;
 
-    public ItemsResource(ItemService itemService, UserService userService) {
+    public ItemsResource(ItemService itemService, UserService userService, DateService dateService) {
         this.itemService = itemService;
         this.userService = userService;
+        this.dateService = dateService;
         this.logger = LoggerFactory.getLogger(ItemsResource.class);
     }
 
@@ -44,15 +46,6 @@ public class ItemsResource {
     public ResponseEntity<List<Item>> getItems() {
         var items = itemService.getAll();
         logger.info("Get request for " + items.size() + " items");
-        return ResponseEntity.ok(items);
-    }
-
-    @GetMapping("/test")
-    public ResponseEntity<List<Item>> test() {
-        var items = itemService.getAll();
-        var dto = new ItemDTO(1, "title", 20, true, "class", new ItemDate(2022, 02, 02));
-        var item = new Item(dto);
-        logger.info(itemService.createWithUserId(item, dto.getUserId()).toString());
         return ResponseEntity.ok(items);
     }
 }

@@ -1,17 +1,19 @@
-package colval.h22.todolist.models;
+package colval.h22.todolist.models.entities;
 
 import colval.h22.todolist.models.dto.UserDTO;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.*;
+import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "user")
-@Data
+@Getter
+@Setter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @NamedQuery(
@@ -34,8 +36,13 @@ public class User {
 
     // RELATIONS
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL,
+            mappedBy = "user"
+    )
     @ToString.Exclude
+    @JsonManagedReference
     private List<Item> items;
 
     //
@@ -48,6 +55,19 @@ public class User {
     public User(UserDTO dto) {
         this.username = dto.getUsername();
         this.password = dto.getPassword();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        User user = (User) o;
+        return id != null && Objects.equals(id, user.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
 }
 

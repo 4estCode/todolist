@@ -1,8 +1,8 @@
 package colval.h22.todolist.models;
 
+import colval.h22.todolist.models.entities.User;
 import lombok.*;
 
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;

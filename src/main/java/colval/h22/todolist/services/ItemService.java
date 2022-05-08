@@ -1,23 +1,24 @@
 package colval.h22.todolist.services;
 
+import colval.h22.todolist.models.entities.Item;
 import colval.h22.todolist.models.interfaces.InterfaceItemService;
-import colval.h22.todolist.models.Item;
 import colval.h22.todolist.repositories.ItemRepository;
-import org.hibernate.cfg.NotYetImplementedException;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
-import java.util.Calendar;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class ItemService implements InterfaceItemService {
     private final ItemRepository itemRepository;
     private final UserService userService;
+    private final DateService dateService;
 
-    public ItemService(ItemRepository itemRepository, UserService userService) {
+    public ItemService(ItemRepository itemRepository, UserService userService, DateService dateService) {
         this.itemRepository = itemRepository;
         this.userService = userService;
+        this.dateService = dateService;
     }
 
     @Override
@@ -25,18 +26,24 @@ public class ItemService implements InterfaceItemService {
         var userFound = userService.read(userId);
         item.setUser(userFound);
 
+        item.setDeadline(
+                dateService.getOrCreate(
+                        item.getDeadline().getYear(),
+                        item.getDeadline().getMonth(),
+                        item.getDeadline().getDay())
+        );
+
         return itemRepository.save(item);
     }
 
     @Override
     public List<Item> createManyWithUserId(List<Item> items, Long userId) {
-        var userFound = userService.read(userId);
-
-        for (var item : items)
-            item.setUser(userFound);
-
-        itemRepository.saveAll(items);
-        return items;
+        var returnList = new ArrayList<Item>();
+        for (var item :
+                items) {
+            returnList.add(createWithUserId(item, userId));
+        }
+        return returnList;
     }
 
     @Override
@@ -63,6 +70,6 @@ public class ItemService implements InterfaceItemService {
 
     @Override
     public List<Item> getByDate(Date date) {
-        throw new NotYetImplementedException();
+        return null;
     }
 }

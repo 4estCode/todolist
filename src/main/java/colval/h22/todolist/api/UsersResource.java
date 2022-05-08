@@ -1,6 +1,6 @@
 package colval.h22.todolist.api;
 
-import colval.h22.todolist.models.User;
+import colval.h22.todolist.models.entities.User;
 import colval.h22.todolist.models.dto.UserDTO;
 import colval.h22.todolist.services.ItemService;
 import colval.h22.todolist.services.UserService;

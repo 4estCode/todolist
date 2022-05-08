@@ -1,9 +1,7 @@
 package colval.h22.todolist.models.dto;
 
-import colval.h22.todolist.models.ItemDate;
+import colval.h22.todolist.models.entities.ItemDate;
 import lombok.Data;
-
-import java.sql.Timestamp;
 
 @Data
 public class ItemDTO {
