@@ -49,16 +49,4 @@ public class UserService implements InterfaceUserService {
     public Optional<User> getByCredentials(String username, String password) {
         return userRepository.getByCredentials(username, password);
     }
-
-    public Week getCurrentWeek(Long id) {
-        var user = read(id);
-        Week currentWeek = new Week();
-
-        long todayMillis = System.currentTimeMillis();
-//        int numberOfToday = new Date(todayMillis).toLocalDate().getDayOfMonth();
-
-        Week.GenerateWeekFromDate(new Date(todayMillis).toLocalDate());
-
-        return null;
-    }
 }
