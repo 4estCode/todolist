@@ -29,8 +29,6 @@ public class ItemsResource {
         this.logger = LoggerFactory.getLogger(ItemsResource.class);
     }
 
-
-
     @PostMapping("/create")
     public ResponseEntity<Item> createItem(@RequestBody ItemDTO dto) {
         logger.info("Post request to create item:" + dto.toString());
@@ -42,10 +40,29 @@ public class ItemsResource {
         return ResponseEntity.ok(item);
     }
 
+    @PutMapping("/update/{item_id}")
+    public ResponseEntity<Item> updateItem(@RequestBody ItemDTO dto, @PathVariable long item_id) {
+        logger.info("Update item:" + dto.toString());
+        var item = new Item(dto);
+        item.setId(item_id);
+        item = itemService.update(item);
+
+        return ResponseEntity.ok(item);
+    }
+
     @GetMapping()
     public ResponseEntity<List<Item>> getItems() {
         var items = itemService.getAll();
         logger.info("Get request for " + items.size() + " items");
         return ResponseEntity.ok(items);
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<Item> deleteItem(@RequestBody long itemId) {
+        logger.info("Delete item:" + itemId);
+
+        var item = itemService.delete(itemId);
+
+        return ResponseEntity.ok(item);
     }
 }

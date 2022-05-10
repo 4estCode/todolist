@@ -1,5 +1,7 @@
 package colval.h22.todolist.api;
 
+import colval.h22.todolist.models.dto.ItemDTO;
+import colval.h22.todolist.models.entities.Item;
 import colval.h22.todolist.models.entities.User;
 import colval.h22.todolist.models.dto.UserDTO;
 import colval.h22.todolist.services.ItemService;
@@ -57,5 +59,24 @@ public class UsersResource {
             logger.info("Connection refused...");
             return ResponseEntity.status(401).build();
         }
+    }
+
+    @PutMapping("/update/{user_id}")
+    public ResponseEntity<User> updateItem(@RequestBody UserDTO dto, @PathVariable long user_id) {
+        logger.info("Update user:" + dto.getUsername());
+        var user = new User(dto);
+        user.setId(user_id);
+        user = userService.update(user);
+
+        return ResponseEntity.ok(user);
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<User> deleteItem(@RequestBody long userId) {
+        logger.info("Delete user:" + userId);
+
+        var user = userService.delete(userId);
+
+        return ResponseEntity.ok(user);
     }
 }
