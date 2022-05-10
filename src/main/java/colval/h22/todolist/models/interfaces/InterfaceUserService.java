@@ -18,4 +18,6 @@ public interface InterfaceUserService {
     List<User> getAll();
 
     Optional<User> getByCredentials(String username, String password);
+
+    Optional<User> findByUsername(String s);
 }
