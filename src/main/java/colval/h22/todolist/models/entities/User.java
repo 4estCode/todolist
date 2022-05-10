@@ -16,9 +16,14 @@ import java.util.Objects;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@NamedQuery(
-        name = "User.getByCredentials",
-        query = "select u from User u where u.username = :username and u.password = :password")
+@NamedQueries({
+        @NamedQuery(
+                name = "User.getByCredentials",
+                query = "select u from User u where u.username = :username and u.password = :password"),
+        @NamedQuery(
+                name = "User.findByUsername",
+                query = "select u from User u where u.username = :username")
+})
 public class User {
 
     // VARIABLES

@@ -49,4 +49,9 @@ public class UserService implements InterfaceUserService {
     public Optional<User> getByCredentials(String username, String password) {
         return userRepository.getByCredentials(username, password);
     }
+
+    @Override
+    public Optional<User> findByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
 }
