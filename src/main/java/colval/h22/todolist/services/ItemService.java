@@ -1,5 +1,6 @@
 package colval.h22.todolist.services;
 
+import colval.h22.todolist.models.Week;
 import colval.h22.todolist.models.entities.Item;
 import colval.h22.todolist.models.interfaces.InterfaceItemService;
 import colval.h22.todolist.repositories.ItemRepository;
@@ -69,7 +70,20 @@ public class ItemService implements InterfaceItemService {
     }
 
     @Override
-    public List<Item> getByDate(Date date) {
-        return null;
+    public Week populateWeekWithUserTasks(Week week, long userId) {
+        var days = week.getDays();
+        for (var day: days) {
+            var dateFound = dateService.getByDate(
+                    day.getLocalDate().getYear(),
+                    day.getLocalDate().getMonthValue(),
+                    day.getLocalDate().getDayOfMonth()
+            );
+            if (dateFound.isPresent()) {
+                var todos = new ArrayList<>(dateFound.orElseThrow().getItems());
+                day.setTodos(todos);
+            }
+        }
+
+        return week;
     }
 }

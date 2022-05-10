@@ -27,17 +27,34 @@ public class CalendarResource {
         this.logger = LoggerFactory.getLogger(CalendarResource.class);
     }
 
-    @GetMapping("/week")
-    public ResponseEntity<Week> getCurrentWeekForUser(@RequestBody long userId) {
+    @GetMapping("/week/{user_id}")
+    public ResponseEntity<Week> getCurrentWeekForUser(@PathVariable long user_id) {
         var week = Week.GenerateCurrentWeek();
-        var user = userService.read(userId);
+        week = itemService.populateWeekWithUserTasks(week, user_id);
 
         return ResponseEntity.ok(week);
     }
 
-    @GetMapping()
-    public ResponseEntity<Week> getWeekByDayForUser(@RequestBody DateDTO dateDTO) {
+    @GetMapping("/{user_id}")
+    public ResponseEntity<Week> getWeekByDayForUser(@RequestBody DateDTO dateDTO, @PathVariable long user_id) {
         var week = Week.GenerateWeekFromDate(dateDTO);
+        week = itemService.populateWeekWithUserTasks(week, user_id);
+
+        return ResponseEntity.ok(week);
+    }
+
+    @GetMapping("/week/previous/{user_id}")
+    public ResponseEntity<Week> getPreviousWeekForUser(@RequestBody DateDTO dateDTO, @PathVariable long user_id) {
+        var week = Week.GeneratePreviousWeek(dateDTO);
+        week = itemService.populateWeekWithUserTasks(week, user_id);
+
+        return ResponseEntity.ok(week);
+    }
+
+    @GetMapping("/week/next/{user_id}")
+    public ResponseEntity<Week> getNextWeekForUser(@RequestBody DateDTO dateDTO, @PathVariable long user_id) {
+        var week = Week.GenerateNextWeek(dateDTO);
+        week = itemService.populateWeekWithUserTasks(week, user_id);
 
         return ResponseEntity.ok(week);
     }

@@ -7,6 +7,7 @@ import colval.h22.todolist.repositories.DateRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 @Service
 public class DateService implements InterfaceDateService {
@@ -51,6 +52,11 @@ public class DateService implements InterfaceDateService {
     @Override
     public ItemDate read(Long id) {
         return dateRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public Optional<ItemDate> getByDate(int year, int month, int day) {
+        return dateRepository.getByDate(year, month, day);
     }
 
     @Override
