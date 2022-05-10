@@ -34,6 +34,7 @@ public class TodoController {
         model.addAttribute("username", user.getUsername());
         model.addAttribute("week", week);
         var localDate = week.getSunday().getLocalDate();
+
         var dto = new DateDTO(localDate.getYear(), localDate.getMonthValue(), localDate.getDayOfMonth());
         model.addAttribute("dto", dto);
         return "pages/calendar/show";
@@ -45,8 +46,8 @@ public class TodoController {
         return "pages/user/profile";
     }
 
-    @GetMapping("/next")
-    public String nextWeek(@ModelAttribute DateDTO dto, Model model, Principal principal) {
+    @PostMapping("/next")
+    public String nextWeek(@ModelAttribute("dto") DateDTO dto, Model model, Principal principal) {
         var user = userService.findByUsername(principal.getName()).orElseThrow();
 
         Week week = Week.GenerateNextWeek(dto);
@@ -54,6 +55,7 @@ public class TodoController {
 
         model.addAttribute("username", user.getUsername());
         model.addAttribute("week", week);
-        return "redirect:/";
+        System.out.println(week);
+        return showIndex(model, principal);
     }
 }

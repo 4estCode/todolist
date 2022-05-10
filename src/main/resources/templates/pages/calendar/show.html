@@ -25,11 +25,11 @@
             <!--Center Box-->
             <div class="flex-row align-items-center justify-content-center text-center m-0">
                 <a><p class="btn btn-sm btn-danger">Previous</p></a>
-                <form th:action="@{/next}" th:object="${dto}" method="get">
+                <form action="#" th:action="@{/next}" th:object="${dto}" method="post">
                     <input type="hidden" th:field="*{year}" th:value="${week.getSunday().getLocalDate().getYear()}">
                     <input type="hidden" th:field="*{month}" th:value="${week.getSunday().getLocalDate().getMonthValue()}">
                     <input type="hidden" th:field="*{day}" th:value="${week.getSunday().getLocalDate().getDayOfMonth()}">
-                    <a type="submit"><p class="btn btn-sm btn-danger">Next</p></a>
+                    <input type="submit" value="submit">
                 </form>
             </div>
             <table class="table">
