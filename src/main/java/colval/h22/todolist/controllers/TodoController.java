@@ -25,17 +25,25 @@ public class TodoController {
         this.userService = userService;
     }
 
-    @GetMapping
+    @GetMapping()
     public String showIndex(Model model, Principal principal) {
         var user = userService.findByUsername(principal.getName()).orElseThrow();
-        var week = Week.GenerateCurrentWeek();
-        week = itemService.populateWeekWithUserTasks(week, user.getId());
+        Week week = new Week();
 
         model.addAttribute("username", user.getUsername());
-        model.addAttribute("week", week);
+
+        if (!model.containsAttribute("week")) {
+            week = Week.GenerateCurrentWeek();
+            week = itemService.populateWeekWithUserTasks(week, user.getId());
+            model.addAttribute("week", week);
+        } else {
+            week = (Week) model.getAttribute("week");
+            week = itemService.populateWeekWithUserTasks(week, user.getId());
+            model.addAttribute("week", week);
+        }
         var localDate = week.getSunday().getLocalDate();
 
-        var dto = new DateDTO(localDate.getYear(), localDate.getMonthValue(), localDate.getDayOfMonth());
+        var dto = new DateDTO(localDate.getYear(), localDate.getMonthValue(), localDate.getDayOfMonth()); // FIXME : Bad code
         model.addAttribute("dto", dto);
         return "pages/calendar/show";
     }
@@ -44,6 +52,17 @@ public class TodoController {
     public String showProfile(Model model, Principal principal) {
         model.addAttribute("username", principal.getName());
         return "pages/user/profile";
+    }
+
+    @PostMapping("/current")
+    public String current(@ModelAttribute("dto") DateDTO dto, Model model, Principal principal) {
+        var user = userService.findByUsername(principal.getName()).orElseThrow();
+        Week week = Week.GenerateCurrentWeek();
+        week = itemService.populateWeekWithUserTasks(week, user.getId());
+
+        model.addAttribute("week", week);
+        model.addAttribute("username", user.getUsername());
+        return showIndex(model, principal);
     }
 
     @PostMapping("/next")
@@ -55,7 +74,18 @@ public class TodoController {
 
         model.addAttribute("username", user.getUsername());
         model.addAttribute("week", week);
-        System.out.println(week);
+        return showIndex(model, principal);
+    }
+
+    @PostMapping("/previous")
+    public String previousWeek(@ModelAttribute("dto") DateDTO dto, Model model, Principal principal) {
+        var user = userService.findByUsername(principal.getName()).orElseThrow();
+
+        Week week = Week.GeneratePreviousWeek(dto);
+        week = itemService.populateWeekWithUserTasks(week, user.getId());
+
+        model.addAttribute("username", user.getUsername());
+        model.addAttribute("week", week);
         return showIndex(model, principal);
     }
 }
