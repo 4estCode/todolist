@@ -54,6 +54,13 @@ public class TodoController {
         return "pages/user/profile";
     }
 
+    @GetMapping("/addItem")
+    public String addItem(Model model, Principal principal) {
+        model.addAttribute("username", principal.getName());
+
+        return "pages/calendar/add";
+    }
+
     @PostMapping("/current")
     public String current(@ModelAttribute("dto") DateDTO dto, Model model, Principal principal) {
         var user = userService.findByUsername(principal.getName()).orElseThrow();
