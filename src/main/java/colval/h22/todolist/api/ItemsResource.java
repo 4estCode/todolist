@@ -1,9 +1,7 @@
 package colval.h22.todolist.api;
 
 import colval.h22.todolist.models.entities.Item;
-import colval.h22.todolist.models.entities.ItemDate;
 import colval.h22.todolist.models.dto.ItemDTO;
-import colval.h22.todolist.models.entities.User;
 import colval.h22.todolist.services.DateService;
 import colval.h22.todolist.services.ItemService;
 import colval.h22.todolist.services.UserService;

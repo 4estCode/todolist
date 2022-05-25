@@ -7,52 +7,83 @@
           integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 </head>
 <body style="background: rgba(36, 201, 126, 0.28);">
-<div class="d-flex flex-row align-items-center">
+<div class="d-flex flex-row align-items-center justify-content-center text-center">
     <div style="height: 75vh; width: 12.5vw; min-height: 75vh; min-width: 12.5vw; max-height: 75vh; max-width: 12.5vw;" class="w-100 h-100">
         <!--Left Box-->
+        <div>
+            <a th:href="@{/logout}"><h1 class="btn btn-danger fw-bold m-1" style="font-size: 1.5vw;font-family: Verdana, sans-serif;">Disconnect</h1></a>
+        </div>
     </div>
     <div class="flex-row align-items-center justify-content-center text-center m-0">
         <div style="height: 12.5vh; width: 75vw; min-height: 12.5vh; min-width: 75vw; max-height: 12.5vh; max-width: 75vw;" class="flex-column w-100 h-100">
             <div style="justify-content: center; align-items: center;">
-                <h1 class="h1 text-center fw-bold w-auto" style="font-family: Verdana, sans-serif; font-size: 7vh;">TODO™</h1>
+                <h1 class="h1 text-center fw-bold w-auto" style="font-family: Verdana, sans-serif; font-size: 7vh; height: 8vh;">TODO™</h1>
             </div>
             <!--Top Box-->
         </div>
         <div style="height: 75vh; width: 75vw; min-height: 75vh; min-width: 75vw; max-height: 75vh; max-width: 75vw; background: rgba(255, 255, 255, 0.1); border-radius: 15px;" class="w-100 h-100 p-4 shadow-lg">
             <!--Center Box-->
-            <!-- Container -> Table -->
+            <div class="flex-row align-items-center justify-content-center text-center m-0">
+                <form class="d-inline" action="#" th:action="@{/previous}" th:object="${dto}" method="post">
+                    <input type="hidden" th:field="*{year}" th:value="${week.getSunday().getLocalDate().getYear()}">
+                    <input type="hidden" th:field="*{month}" th:value="${week.getSunday().getLocalDate().getMonthValue()}">
+                    <input type="hidden" th:field="*{day}" th:value="${week.getSunday().getLocalDate().getDayOfMonth()}">
+                    <input class="btn btn-outline-dark d-inline" type="submit" value="Previous">
+                </form>
+                <form class="d-inline" action="#" th:action="@{/current}" th:object="${dto}" method="post">
+                    <input type="hidden" th:field="*{year}" th:value="${week.getSunday().getLocalDate().getYear()}">
+                    <input type="hidden" th:field="*{month}" th:value="${week.getSunday().getLocalDate().getMonthValue()}">
+                    <input type="hidden" th:field="*{day}" th:value="${week.getSunday().getLocalDate().getDayOfMonth()}">
+                    <input class="btn btn-outline-dark d-inline" type="submit" value="Current">
+                </form>
+                <form class="d-inline" action="#" th:action="@{/next}" th:object="${dto}" method="post">
+                    <input type="hidden" th:field="*{year}" th:value="${week.getSunday().getLocalDate().getYear()}">
+                    <input type="hidden" th:field="*{month}" th:value="${week.getSunday().getLocalDate().getMonthValue()}">
+                    <input type="hidden" th:field="*{day}" th:value="${week.getSunday().getLocalDate().getDayOfMonth()}">
+                    <input class="btn btn-outline-dark d-inline" type="submit" value="Next">
+                </form>
+            </div>
             <table class="table">
                 <thead>
                 <tr>
-                    <th class="col">Dimanche</th>
-                    <th class="col">Lundi</th>
-                    <th class="col">Mardi</th>
-                    <th class="col">Mercredi</th>
-                    <th class="col">Jeudi</th>
-                    <th class="col">Vendredi</th>
-                    <th class="col">Samedi</th>
+                    <th class="col-1">Dimanche</th>
+                    <th class="col-1">Lundi</th>
+                    <th class="col-1">Mardi</th>
+                    <th class="col-1">Mercredi</th>
+                    <th class="col-1">Jeudi</th>
+                    <th class="col-1">Vendredi</th>
+                    <th class="col-1">Samedi</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="week: ${weeks}">
-                    <td th:each="day: ${week.days}">
-
+                <tr>
+                    <td th:each="day: ${week.getDays()}">
+                        <a th:href="'/add/' + ${day.getYearValue()} + '/' + ${day.getMonthValue()} + '/' + ${day.getDayValue()}"><h1 class="btn btn-sm btn-outline-dark">Add</h1></a>
+                        <p class="text-dark" th:text="${day.getMonthDisplayName() + ' ' + day.getLocalDate().getDayOfMonth()}"></p>
+                        <div th:each="todo: ${day.getTodos()}">
+                            <a class="text-decoration-none text-black" th:href="'/details/' + ${todo.getId()}">
+                                <div class="fw-bold border border-1 border-dark rounded-3 btn m-1 p-1 bg-white bg-opacity-25">
+                                    <h2 class="fw-bolder" style="font-size: 1.5vw;" th:text="${todo.getTitle()}"></h2>
+                                    <h2 class="text-success text-decoration-underline" style="font-size: 1vw;" th:if="${todo.isTeamWork()}" th:text="'Team Work'"></h2>
+                                    <h2 style="font-size: 1vw;" th:text="'For ' + ${todo.getClassName()}"></h2>
+                                </div>
+                            </a>
+                        </div>
                     </td>
                 </tr>
                 </tbody>
             </table>
-            <div class="container">
-                <div class="row row-cols-7">
-                    <div style="width: 5vw; height: 5vh;" th:each="day: ${days}" th:text="${day}" class="col m-1 border border-1 border-secondary shadow rounded-3"></div>
-                </div>
-            </div>
         </div>
         <div style="height: 12.5vh; width: 75vw; min-height: 12.5vh; min-width: 75vw; max-height: 12.5vh; max-width: 75vw;" class="w-100 h-100">
+            <footer th:replace="pages/fragments/footer"></footer>
             <!--Bottom Box-->
         </div>
     </div>
     <div style="height: 75vh; width: 12.5vw; min-height: 75vh; min-width: 12.5vw; max-height: 75vh; max-width: 12.5vw;" class="w-100 h-100">
         <!--Right Box-->
+        <div>
+            <a th:href="@{/user/profile}"><h1 class="btn btn-primary fw-bold m-1" style="font-size: 1.5vw;font-family: Verdana, sans-serif;">Profile</h1></a>
+        </div>
     </div>
 </div>
 </body>

@@ -45,7 +45,7 @@ public class Item {
     @JsonBackReference
     private ItemDate deadline;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     @ToString.Exclude
     @JsonBackReference
@@ -59,6 +59,15 @@ public class Item {
         this.isTeamWork = dto.isTeamWork();
         this.className = dto.getClassName();
         this.deadline = dto.getDeadline();
+    }
+
+    public Item(String title, int percentWeightOnYear, boolean isTeamWork, String className, ItemDate deadline, User user) {
+        this.title = title;
+        this.percentWeightOnYear = percentWeightOnYear;
+        this.isTeamWork = isTeamWork;
+        this.className = className;
+        this.deadline = deadline;
+        this.user = user;
     }
 
     @Override
