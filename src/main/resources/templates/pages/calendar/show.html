@@ -28,19 +28,19 @@
                     <input type="hidden" th:field="*{year}" th:value="${week.getSunday().getLocalDate().getYear()}">
                     <input type="hidden" th:field="*{month}" th:value="${week.getSunday().getLocalDate().getMonthValue()}">
                     <input type="hidden" th:field="*{day}" th:value="${week.getSunday().getLocalDate().getDayOfMonth()}">
-                    <input class="btn btn-danger d-inline" type="submit" value="Previous">
+                    <input class="btn btn-outline-dark d-inline" type="submit" value="Previous">
                 </form>
                 <form class="d-inline" action="#" th:action="@{/current}" th:object="${dto}" method="post">
                     <input type="hidden" th:field="*{year}" th:value="${week.getSunday().getLocalDate().getYear()}">
                     <input type="hidden" th:field="*{month}" th:value="${week.getSunday().getLocalDate().getMonthValue()}">
                     <input type="hidden" th:field="*{day}" th:value="${week.getSunday().getLocalDate().getDayOfMonth()}">
-                    <input class="btn btn-danger d-inline" type="submit" value="Current">
+                    <input class="btn btn-outline-dark d-inline" type="submit" value="Current">
                 </form>
                 <form class="d-inline" action="#" th:action="@{/next}" th:object="${dto}" method="post">
                     <input type="hidden" th:field="*{year}" th:value="${week.getSunday().getLocalDate().getYear()}">
                     <input type="hidden" th:field="*{month}" th:value="${week.getSunday().getLocalDate().getMonthValue()}">
                     <input type="hidden" th:field="*{day}" th:value="${week.getSunday().getLocalDate().getDayOfMonth()}">
-                    <input class="btn btn-danger d-inline" type="submit" value="Next">
+                    <input class="btn btn-outline-dark d-inline" type="submit" value="Next">
                 </form>
             </div>
             <table class="table">
@@ -58,8 +58,8 @@
                 <tbody>
                 <tr>
                     <td th:each="day: ${week.getDays()}">
-                        <a><h1 class="btn btn-sm btn-success">Add</h1></a>
-                        <h1 th:text="${day.getLocalDate().getDayOfMonth()}"></h1>
+                        <a th:href="@{/add + '?yearValue=' + day.getYearValue() + '&monthValue=' + day.getMonthValue() + '&dayValue=' + day.getDayValue()}"><h1 class="btn btn-sm btn-outline-dark">Add</h1></a>
+                        <p class="text-dark" th:text="${day.getMonthDisplayName() + ' ' + day.getLocalDate().getDayOfMonth()}"></p>
                         <div th:each="todo: ${day.getTodos()}">
                             <h2 th:text="${todo.getTitle()}"></h2>
                         </div>

@@ -61,6 +61,15 @@ public class Item {
         this.deadline = dto.getDeadline();
     }
 
+    public Item(String title, int percentWeightOnYear, boolean isTeamWork, String className, ItemDate deadline, User user) {
+        this.title = title;
+        this.percentWeightOnYear = percentWeightOnYear;
+        this.isTeamWork = isTeamWork;
+        this.className = className;
+        this.deadline = deadline;
+        this.user = user;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

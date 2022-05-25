@@ -24,6 +24,18 @@
         <div style="height: 75vh; width: 75vw; min-height: 75vh; min-width: 75vw; max-height: 75vh; max-width: 75vw; background: rgba(255, 255, 255, 0.1); border-radius: 15px;" class="w-100 h-100 p-4 shadow-lg">
             <!--Center Box-->
             <!-- Show date from chosen date on show.html -->
+            <h1 class="h1" th:text="${'Year: ' + date.getYear()}"></h1>
+            <h1 class="h1" th:text="${'Month: ' + date.getMonth()}"></h1>
+            <h1 class="h1" th:text="${'Day: ' + date.getDay()}"></h1>
+            <form  action="#" th:action="@{/postAdd}" th:object="${dto}" method="post">
+                <input type="hidden" th:field="*{userId}" th:value="${userId}">
+                <input type="text" th:field="*{title}" placeholder="Title">
+                <input type="number" th:field="*{percentWeightOnYear}">
+                <input type="checkbox" th:field="*{isTeamWork}">
+                <input type="text" th:field="*{className}">
+                <input type="text" th:field="*{deadline}">
+            </form>
+
             <!-- Have a input fields for adding -->
             <!-- Post for adding then redirect to show from this weeksac -->
         </div>
