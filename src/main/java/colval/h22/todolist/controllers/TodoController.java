@@ -3,6 +3,7 @@ package colval.h22.todolist.controllers;
 import colval.h22.todolist.models.Week;
 import colval.h22.todolist.models.dto.DateDTO;
 import colval.h22.todolist.models.dto.ItemDTO;
+import colval.h22.todolist.models.dto.UserDTO;
 import colval.h22.todolist.models.entities.Item;
 import colval.h22.todolist.models.entities.ItemDate;
 import colval.h22.todolist.services.DateService;
@@ -58,6 +59,10 @@ public class TodoController {
     @GetMapping("/user/profile")
     public String showProfile(Model model, Principal principal) {
         model.addAttribute("username", principal.getName());
+        var user = userService.findByUsername(principal.getName()).orElseThrow();
+        model.addAttribute("userDTO", new UserDTO(user.getUsername(), user.getPassword()));
+        model.addAttribute("user_id", user.getId());
+
         return "pages/user/profile";
     }
 
@@ -138,5 +143,14 @@ public class TodoController {
         item.setDeadline(null);
         itemService.update(item);
         return showIndex(model, principal);
+    }
+
+    @PostMapping("/update/profile")
+    public String updateProfile(@RequestParam("user_id") long user_id, @RequestParam("username") String username, Model model, Principal principal) {
+        model.addAttribute("username", principal.getName());
+        var user = userService.read(user_id);
+        user.setUsername(username);
+        userService.update(user);
+        return "redirect:/logout";
     }
 }

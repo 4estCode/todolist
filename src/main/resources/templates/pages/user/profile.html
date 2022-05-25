@@ -23,7 +23,16 @@
         </div>
         <div style="height: 75vh; width: 75vw; min-height: 75vh; min-width: 75vw; max-height: 75vh; max-width: 75vw; background: rgba(255, 255, 255, 0.1); border-radius: 15px;" class="w-100 h-100 p-4 shadow-lg">
             <!--Center Box-->
-            <h1>Profile</h1>
+            <form th:action="@{/update/profile}" method="post">
+                <div>
+                    <h1 class="h1">Profile</h1>
+                    <br>
+                    <label class="fw-bolder">Username</label>
+                    <input type="text" class="form-control" name="username">
+                    <input type="hidden" name="user_id" th:value="${user_id}">
+                    <input type="submit" class="btn btn-danger p-1" value="Update and Logout">
+                </div>
+            </form>
         </div>
         <div style="height: 12.5vh; width: 75vw; min-height: 12.5vh; min-width: 75vw; max-height: 12.5vh; max-width: 75vw;" class="w-100 h-100">
             <footer th:replace="pages/fragments/footer"></footer>
