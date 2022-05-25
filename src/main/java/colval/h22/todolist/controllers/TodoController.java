@@ -50,6 +50,8 @@ public class TodoController {
 
         var dto = new DateDTO(localDate.getYear(), localDate.getMonthValue(), localDate.getDayOfMonth()); // FIXME : Bad code
         model.addAttribute("dto", dto);
+        model.addAttribute("itemDto");
+        model.addAttribute("date", new DateDTO(1,1,1));
         return "pages/calendar/show";
     }
 
@@ -59,30 +61,25 @@ public class TodoController {
         return "pages/user/profile";
     }
 
-    @GetMapping("/add?yearValue={yearValue}&monthValue={monthValue}&dayValue={dayValue}")
-    public String add(@PathVariable int yearValue, @PathVariable int monthValue, @PathVariable int dayValue, Model model, Principal principal) {
+    @GetMapping("/add/{year}/{month}/{day}")
+    public String add(@PathVariable int year, @PathVariable int month, @PathVariable int day, Model model, Principal principal) {
         model.addAttribute("username", principal.getName());
+        model.addAttribute("user_id", userService.findByUsername(principal.getName()).orElseThrow().getId());
 
-        var dateFound = dateService.getByDate(yearValue, monthValue, dayValue).orElseThrow();
+        var dateFound = dateService.getOrCreate(year, month, day);
 
-        return addItem(dateFound, model, principal);
-    }
-
-    @GetMapping("/add")
-    public String addItem(ItemDate date, Model model, Principal principal) {
-        model.addAttribute("username", principal.getName());
-        model.addAttribute("date", date);
-        model.addAttribute("userId", userService.findByUsername(principal.getName()));
+        model.addAttribute("date", dateFound);
+        model.addAttribute("itemDto", new ItemDTO());
 
         return "pages/calendar/add";
     }
 
-    @PostMapping("/postAdd")
-    public String addItem(@ModelAttribute("dto") ItemDTO itemDTO, Model model, Principal principal) {
+    @PostMapping("/add") // Debug Args hopefully I have time to fix this
+    public String addItem(@RequestParam("year") int year, @RequestParam("month") int month, @RequestParam("day") int day, @RequestParam("userId") long userId, @RequestParam("title") String title, @RequestParam("percentWeightOnYear") int percentWeightOnYear, @RequestParam(value = "isTeamWork", defaultValue = "false", required = false) boolean isTeamWork, @RequestParam("className") String className, Model model, Principal principal) {
         model.addAttribute("username", principal.getName());
-
+        var itemDTO = new ItemDTO(userId, title, percentWeightOnYear, isTeamWork, className, new ItemDate(year,month,day));
         itemService.createWithUserId(new Item(itemDTO), itemDTO.getUserId());
-
+        System.out.println(itemDTO);
         return "redirect:/";
     }
 
@@ -122,6 +119,24 @@ public class TodoController {
 
         model.addAttribute("username", user.getUsername());
         model.addAttribute("week", week);
+        return showIndex(model, principal);
+    }
+
+    @GetMapping("/details/{itemId}")
+    public String previousWeek(@PathVariable long itemId, Model model, Principal principal) {
+        model.addAttribute("username", principal.getName());
+        var item = itemService.read(itemId);
+        model.addAttribute("details_item", item);
+        return "pages/calendar/details";
+    }
+
+    @GetMapping("/delete/item/{itemId}")
+    public String delete(@PathVariable long itemId, Model model, Principal principal) {
+        model.addAttribute("username", principal.getName());
+        var item = itemService.read(itemId);
+        item.setUser(null);
+        item.setDeadline(null);
+        itemService.update(item);
         return showIndex(model, principal);
     }
 }

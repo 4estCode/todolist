@@ -2,8 +2,10 @@ package colval.h22.todolist.models.dto;
 
 import colval.h22.todolist.models.entities.ItemDate;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class ItemDTO {
     private long userId;
     private String title;

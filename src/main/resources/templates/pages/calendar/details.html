@@ -23,40 +23,15 @@
         </div>
         <div style="height: 75vh; width: 75vw; min-height: 75vh; min-width: 75vw; max-height: 75vh; max-width: 75vw; background: rgba(255, 255, 255, 0.1); border-radius: 15px;" class="w-100 h-100 p-4 shadow-lg">
             <!--Center Box-->
-            <!-- Show date from chosen date on show.html -->
-            <h1 class="h1" th:text="${'Year: ' + date.getYear()}"></h1>
-            <h1 class="h1" th:text="${'Month: ' + date.getMonth()}"></h1>
-            <h1 class="h1" th:text="${'Day: ' + date.getDay()}"></h1>
-            <form class="w-auto" action="#" th:action="@{/add}" method="post">
-                <input type="hidden" name="userId" th:value="${user_id}">
-                <input type="hidden" name="year" th:value="${date.getYear()}">
-                <input type="hidden" name="month" th:value="${date.getMonth()}">
-                <input type="hidden" name="day" th:value="${date.getDay()}">
-                <label class="form-label">
-                    Title :
-                    <input class="form-text" type="text" name="title">
-                </label>
-                <br>
-                <label class="form-label">
-                    Weight on year in % :
-                    <input class="form-text" type="number" name="percentWeightOnYear">
-                </label>
-                <br>
-                <label class="form-label">
-                    Is teamwork :
-                    <input class="d-inline" type="checkbox" name="isTeamWork">
-                </label>
-                <br>
-                <label class="form-label">
-                    Class name :
-                    <input class="form-text" type="text" name="className">
-                </label>
-                <br>
-                <input type="submit" value="Add">
-            </form>
-
-            <!-- Have a input fields for adding -->
-            <!-- Post for adding then redirect to show from this weeksac -->
+            <div>
+                <span class="h1 fw-bold d-block">Title : <h1 class="d-inline" th:text="${details_item.getTitle()}"></h1></span>
+                <span class="h1 fw-bold d-block">Weight on year : <h1 class="d-inline" th:text="${details_item.getPercentWeightOnYear()} + '%'"></h1></span>
+                <span class="h1 fw-bold d-block">Team work : <h1 class="d-inline" th:text="${details_item.isTeamWork()}"></h1></span>
+                <span class="h1 fw-bold d-block">Class : <h1 class="d-inline" th:text="${details_item.getClassName()}"></h1></span>
+                <span class="h1 fw-bold d-block">Deadline : <h1 class="d-inline" th:text="${details_item.getDeadline().getYear()}+'/'+${details_item.getDeadline().getMonth()}+'/'+${details_item.getDeadline().getDay()}"></h1></span>
+                <span class="h1 fw-bold d-block">User : <h1 class="d-inline" th:text="${details_item.getUser().getUsername()}"></h1></span>
+                <a class="btn btn-danger p-1" th:href="'/delete/item/' + ${details_item.getId()}">DELETE</a>
+            </div>
         </div>
         <div style="height: 12.5vh; width: 75vw; min-height: 12.5vh; min-width: 75vw; max-height: 12.5vh; max-width: 75vw;" class="w-100 h-100">
             <footer th:replace="pages/fragments/footer"></footer>

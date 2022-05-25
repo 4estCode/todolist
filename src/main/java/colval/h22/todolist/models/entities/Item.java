@@ -45,7 +45,7 @@ public class Item {
     @JsonBackReference
     private ItemDate deadline;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     @ToString.Exclude
     @JsonBackReference

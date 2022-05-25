@@ -58,10 +58,16 @@
                 <tbody>
                 <tr>
                     <td th:each="day: ${week.getDays()}">
-                        <a th:href="@{/add + '?yearValue=' + day.getYearValue() + '&monthValue=' + day.getMonthValue() + '&dayValue=' + day.getDayValue()}"><h1 class="btn btn-sm btn-outline-dark">Add</h1></a>
+                        <a th:href="'/add/' + ${day.getYearValue()} + '/' + ${day.getMonthValue()} + '/' + ${day.getDayValue()}"><h1 class="btn btn-sm btn-outline-dark">Add</h1></a>
                         <p class="text-dark" th:text="${day.getMonthDisplayName() + ' ' + day.getLocalDate().getDayOfMonth()}"></p>
                         <div th:each="todo: ${day.getTodos()}">
-                            <h2 th:text="${todo.getTitle()}"></h2>
+                            <a class="text-decoration-none text-black" th:href="'/details/' + ${todo.getId()}">
+                                <div class="fw-bold border border-1 border-dark rounded-3 btn m-1 p-1 bg-white bg-opacity-25">
+                                    <h2 class="fw-bolder" style="font-size: 1.5vw;" th:text="${todo.getTitle()}"></h2>
+                                    <h2 class="text-success text-decoration-underline" style="font-size: 1vw;" th:if="${todo.isTeamWork()}" th:text="'Team Work'"></h2>
+                                    <h2 style="font-size: 1vw;" th:text="'For ' + ${todo.getClassName()}"></h2>
+                                </div>
+                            </a>
                         </div>
                     </td>
                 </tr>

@@ -61,10 +61,10 @@ public class DateService implements InterfaceDateService {
 
     @Override
     public ItemDate getOrCreate(int year, int month, int day) {
-        var dateFound = getIfExists(new ItemDate(year, month, day));
+        var dateFound = getByDate(year, month, day);
 
-        if (dateFound != null) {
-            return dateFound;
+        if (dateFound.isPresent()) {
+            return dateFound.orElseThrow();
         } else {
             return create(new ItemDate(year, month, day));
         }
